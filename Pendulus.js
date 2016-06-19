@@ -1,3 +1,4 @@
+function load(){
 (function (lib, img, cjs, ss) {
 
 var p; // shortcut to reference prototypes
@@ -58,4 +59,21 @@ p.nominalBounds = new cjs.Rectangle(-52.6,-1,105.2,392.3);
 p.nominalBounds = new cjs.Rectangle(400.1,320.6,161,153.5);
 
 })(lib = lib||{}, images = images||{}, createjs = createjs||{}, ss = ss||{});
+}
 var lib, images, createjs, ss;
+
+var canvas, stage, exportRoot;
+function init() {
+	load()
+	canvas = document.getElementById("canvas");
+	exportRoot = new lib.Pendulus();
+
+	stage = new createjs.Stage(canvas);
+	stage.addChild(exportRoot);
+	stage.update();
+
+	createjs.Ticker.setFPS(lib.properties.fps);
+	createjs.Ticker.addEventListener("tick", stage);
+}
+
+window.addEventListener("load", init, false);
