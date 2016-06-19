@@ -64,18 +64,16 @@ var lib, images, createjs, ss;
 
 var canvas, stage, exportRoot;
 function init() {
-	load()
-	console.log("ok")
+	//load();
 	canvas = document.getElementById("canvas");
 	exportRoot = new lib.Pendulus();
 
 	stage = new createjs.Stage(canvas);
 	stage.addChild(exportRoot);
 	stage.update();
-	console.log("ok2")
+
 	createjs.Ticker.setFPS(lib.properties.fps);
 	createjs.Ticker.addEventListener("tick", stage);
-	console.log("ok3")
 }
 
-window.addEventListener("load", init, false);
+window.addEventListener("load", load, false);
