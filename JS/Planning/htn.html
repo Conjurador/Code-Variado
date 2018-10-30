@@ -1,0 +1,204 @@
+<html>
+	<head>
+		<title>HTN - Hierarchical Task Network</title>
+		<meta charset="utf-8">
+		<script src="htn.js"></script>
+		<style>
+		font-family: monospace;
+		</style>
+	</head>
+	<body>
+		<h1>Estrutura de dados</h1>
+		Goals e States
+		<hr/>
+		<h1>Preambulo</h1>
+tasks = [['travel','me','home','park']]
+<br>var result = seek_plan(state1, tasks, [], 0);
+		<h3>Resultado</h3>
+		<b>Ver no console com variavel 'result'</b>
+		<hr/>
+		<h1>Codigo</h1>
+		<code>
+&nbsp;&nbsp;/*class State{
+<br>&nbsp;constructor(name, func){
+<br>&nbsp;&nbsp;this.name = name;
+<br>&nbsp;&nbsp;this.func = func;
+<br>&nbsp;}
+<br>}
+<br>class Goal{
+<br>&nbsp;constructor(name, func){
+<br>&nbsp;&nbsp;this.name = name;
+<br>&nbsp;&nbsp;this.func = func;
+<br>&nbsp;}
+<br>}*/
+<br>function search(vet, value){
+<br>&nbsp;for(var i in vet)
+<br>&nbsp;&nbsp;if(i==value)
+<br>&nbsp;&nbsp;&nbsp;return true;
+<br>&nbsp;return false;
+<br>}
+<br>var State = function(name, func){
+<br>&nbsp;this.name = name;
+<br>&nbsp;this.func = func;
+<br>}
+<br>
+<br>var Goal = function(name, func){
+<br>&nbsp;this.name = name;
+<br>&nbsp;this.func = func;
+<br>}
+<br>
+<br>var operators = {}, methods = {};
+<br>
+<br>function declare_operators(){
+<br>&nbsp;for(var i in arguments)
+<br>&nbsp;&nbsp;operators[arguments[i].name] = arguments[i];
+<br>}
+<br>
+<br>function declare_methods(task_name){
+<br>&nbsp;methods[task_name] = [];
+<br>&nbsp;for(var i=1; i<arguments.length; i++)
+<br>&nbsp;&nbsp;methods[task_name].push(arguments[i]);
+<br>}
+<br>
+<br>function print_operators(){
+<br>&nbsp;console.log("OPERATORS: "+Object.keys(operators));
+<br>}
+<br>
+<br>function clone(state, depth=1, maxDepth=4){
+<br>&nbsp;var newstate = {};
+<br>&nbsp;for(var i in state)
+<br>&nbsp;&nbsp;if(typeof(state[i])=="object" && depth<maxDepth)
+<br>&nbsp;&nbsp;&nbsp;newstate[i] = clone(state[i], depth++, maxDepth);
+<br>&nbsp;&nbsp;else
+<br>&nbsp;&nbsp;&nbsp;newstate[i] = state[i];
+<br>&nbsp;return newstate;&nbsp;
+<br>}
+<br>
+<br>var t1, t2, novost
+<br>function seek_plan(state, tasks, plan, depth, verbose=0){
+<br>&nbsp;if(verbose>1) console.log('depth '+depth+', tasks: '+tasks);
+<br>&nbsp;if(tasks.length==0){
+<br>&nbsp;&nbsp;if(verbose>2) console.log('depth '+depth+', tasks: '+tasks);
+<br>&nbsp;&nbsp;return plan;
+<br>&nbsp;}
+<br>&nbsp;var task = tasks[0];
+<br>&nbsp;t = tasks;
+<br>&nbsp;&nbsp;
+<br>&nbsp;// Operators&nbsp;
+<br>&nbsp;if(task[0] in operators){
+<br>&nbsp;&nbsp;// if(verbose>2) console.log('depth '+depth+', tasks: '+tasks);
+<br>&nbsp;&nbsp;operator = operators[task[0]];
+<br>&nbsp;&nbsp;var newstate = [], id = 0;&nbsp;&nbsp;
+<br>&nbsp;&nbsp;// console.log(' ***** '+operator.name)
+<br>&nbsp;&nbsp;newstate = operator(clone(state), task.slice(1,task.length));
+<br>&nbsp;&nbsp;// showstate(state)
+<br>&nbsp;&nbsp;
+<br>&nbsp;&nbsp;if(newstate){
+<br>&nbsp;&nbsp;&nbsp;var solution = seek_plan(newstate, tasks.slice(1,tasks.length), plan.concat([task]),depth+1,verbose);
+<br>&nbsp;&nbsp;&nbsp;if(solution!=false){
+<br>&nbsp;&nbsp;&nbsp;&nbsp;return solution;
+<br>&nbsp;&nbsp;&nbsp;}
+<br>&nbsp;&nbsp;}
+<br>&nbsp;}
+<br>&nbsp;// Methods
+<br>&nbsp;if(task[0] in methods){
+<br>&nbsp;&nbsp;var relevant = methods[task[0]];
+<br>&nbsp;&nbsp;for(var i=0, method=relevant[0];i < relevant.length; method = relevant[++i]){
+<br>&nbsp;&nbsp;&nbsp;subtasks = method(state,task.slice(1,task.length));
+<br>&nbsp;&nbsp;&nbsp;if(subtasks!=false){
+<br>&nbsp;&nbsp;&nbsp;&nbsp;var solution = seek_plan(state, subtasks.concat(tasks.slice(1,tasks.length)),plan,depth+1,verbose);
+<br>&nbsp;&nbsp;&nbsp;&nbsp;if(solution!=false)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return solution;
+<br>&nbsp;&nbsp;&nbsp;}
+<br>&nbsp;&nbsp;}
+<br>&nbsp;}
+<br>&nbsp;return false;
+<br>}
+<br>
+<br>/* ----------------------------------
+<br>----------- Caso de estudo ----------
+<br>---------------------------------- */
+<br>function showstate(state, depth=1, name){
+<br>&nbsp;// console.log("\n - "+state.name)
+<br>&nbsp;for(var i in state)
+<br>&nbsp;&nbsp;var txt = "";
+<br>&nbsp;&nbsp;&nbsp;for(var j=0; j<depth*2+3;j++)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;txt += " ";
+<br>&nbsp;&nbsp;console.log(txt+" __ "+i);
+<br>&nbsp;&nbsp;if(typeof(state[i])=="object"){
+<br>&nbsp;&nbsp;&nbsp;showstate(state[i],depth+1)
+<br>&nbsp;&nbsp;}else{
+<br>&nbsp;&nbsp;&nbsp;
+<br>&nbsp;&nbsp;&nbsp;console.log(txt+"-- "+i+": "+state[i])
+<br>&nbsp;&nbsp;}
+<br>&nbsp;&nbsp;&nbsp;
+<br>}
+<br>
+<br>function taxi_rate(dist){
+<br>&nbsp;return 1.5+0.5+dist;
+<br>}
+<br>
+<br>function walk(state, [a, x, y]){
+<br>&nbsp;if(state.loc[a]==x){
+<br>&nbsp;&nbsp;state.loc[a] = y;
+<br>&nbsp;&nbsp;return state;
+<br>&nbsp;}
+<br>&nbsp;return false;
+<br>}
+<br>
+<br>function call_taxi(state,[a,x]){
+<br>&nbsp;state.loc['taxi'] = x;
+<br>&nbsp;return state;
+<br>}
+<br>
+<br>function ride_taxi(state,[a,x,y]){
+<br>&nbsp;if(state.loc['taxi']==x && state.loc[a]==x){
+<br>&nbsp;&nbsp;state.loc['taxi'] = y;
+<br>&nbsp;&nbsp;state.loc[a] = y;
+<br>&nbsp;&nbsp;state.owe[a] = taxi_rate(state.dist[x][y]);
+<br>&nbsp;&nbsp;return state
+<br>&nbsp;}
+<br>&nbsp;return false;
+<br>}
+<br>
+<br>function pay_driver(state, a){
+<br>&nbsp;if(state.cash[a] >= state.owe[a]){
+<br>&nbsp;&nbsp;state.cash[a] = state.cash[a] - state.owe[a];
+<br>&nbsp;&nbsp;state.owe[a] = 0;
+<br>&nbsp;&nbsp;return state;
+<br>&nbsp;}
+<br>&nbsp;return false;
+<br>}
+<br>
+<br>// METHODS
+<br>
+<br>function travel_by_foot(state, [a, x, y]){
+<br>&nbsp;// console.log('state.dist[x][y]<=2: '+(state.dist[x][y]<=2))
+<br>&nbsp;if(state.dist[x][y]<=2)
+<br>&nbsp;&nbsp;return [['walk',a,x,y]];
+<br>&nbsp;return false;
+<br>}
+<br>
+<br>function travel_by_taxi(state, [a, x, y]){        
+<br>&nbsp;if(state.cash[a] >= taxi_rate(state.dist[x][y]))
+<br>&nbsp;&nbsp;return [['call_taxi',a,x], ['ride_taxi',a,x,y], ['pay_driver',a]];
+<br>&nbsp;return false;
+<br>}
+<br>
+<br>declare_operators(walk, call_taxi, ride_taxi, pay_driver);
+<br>declare_methods('travel',travel_by_foot,travel_by_taxi);
+<br>
+<br>var state1 = new State('state1');
+<br>state1.loc = {'me':'home'}
+<br>state1.cash = {'me':20}
+<br>state1.owe = {'me':0}
+<br>state1.dist = {'home':{'park':8}, 'park':{'home':8}}
+<br>
+<br>tasks = [['travel','me','home','park']]
+<br>var result = seek_plan(state1, tasks, [], 0);
+<br>
+<br>// https://pt.sharelatex.com/project/5a65e3748fc253413002260f
+<br>// https://ocs.aaai.org/Papers/AIIDE/2008/AIIDE08-010.pdf
+		</code>
+	</body>
+</html>
