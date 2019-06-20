@@ -1,0 +1,60 @@
+@charset "utf-8";
+/* Classes */
+.button{
+	height:1.5cm;
+	background-color:#ccf;
+}
+.button:hover{
+	background-color:#eef;
+}
+.cell{
+	width:1.99cm;
+	float:left;
+	padding: 0px;
+	margin: 0px;
+}
+.left{
+	float:left;
+}
+.right{
+	float:right;
+}
+.row{
+	background-color: #ff0;
+	border-bottom-style: solid;
+}
+.row:nth-child(odd) {
+	background-color: #cc0;
+}
+.song_note {
+	/*transition-timing-function: linear;*/
+	/*transition: width 2s, height 2s, transform 2s, background-color 2s;*/
+	background-color: #ccc;
+	width:2cm;
+}
+.row, .cell, .song_note{
+	height: 1.7cm;
+}
+
+/* IDs */
+#game{
+	float: right;	
+	padding: 0px;
+	margin: 0px;
+}
+#note{
+	float: left;
+	background-color: #fff;
+	height: 6cm;
+}
+#setting{
+	height:1cm;
+	background-color: #cff;
+}
+#screen{
+	height:6cm;
+	background-color: #cc0; /* dark yellow */
+}
+#screen, #setting{
+	width: 14cm;
+}

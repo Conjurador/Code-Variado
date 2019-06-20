@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+	<head>
+		<title>Prototype</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="js/jquery-ui-1.12.1.custom/jquery-ui.min.css" >
+		<link rel="stylesheet" type="text/css" href="css/main.css"> 
+		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+		<script src="./js/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+		<script>
+			var count = 0, ok;
+			$(document).ready(function(){
+				// Drag buttons of duration
+				
+				$( ".button" ).draggable({
+					helper: "clone",
+					//cursor: 'move',
+					snap: ".row",
+					/*snapMode: "inner",*/
+					start: function() {
+						// yellow
+						$("#screen").css( "background-color", "#ff0" );
+					},
+					stop: function() {
+						$("#screen").css( "background-color", "" );
+					}
+				});
+				$("#game").droppable({
+					accept: '.button',
+					drop: function(event, ui) {
+						if($(ui.helper).attr("class").search("song_note") >= 0)
+							return;
+						var dui = $(ui.helper.clone());
+						//dui.unbind()
+						ok = dui
+						dui.unbind()
+						dui.attr("class", "button")
+						dui.children(0).toggle(100)
+						$(dui).addClass("song_note");
+						switch($(dui).attr("name")){
+							case "semibreve":
+								$(dui).css("width", "6cm");
+								$(dui).css("background-color", "#cef");
+								break;
+							case "minima":
+								$(dui).css("width", "3cm");
+								break;
+							case "semiminima":
+								$(dui).css("width", "1.5cm");
+								break;
+							case "colcheia":
+								$(dui).css("width", "0.75cm");
+								break;
+						}
+						$(this).append(dui);
+						$( ".song_note" ).draggable({ 
+							snapMode: "inner",
+							snap: ".row"
+						})
+					}
+				});
+				// Drop buttons of duration
+
+			})
+		</script>
+	</head>
+	<body>
+		<header id="setting">
+			<div class="left">
+				<img src="./img/play.png" height="30px" />
+				<img src="./img/power-button-off.png" height="30px" />
+				<img src="./img/settings.png" height="30px" />
+			</div>
+			<div class="right"></div>
+		</header>
+		<main id="screen">
+			<aside id="note">
+				<div class="button" name="semibreve">
+					<img src="./img/semibreve.png" alt="Semibreve" />
+				</div>
+				<div class="button" name="minima">
+					<img src="./img/mínima.png" alt="Mínima" />
+				</div>
+				<div class="button" name="seminima">
+					<img src="./img/semínima.png" alt="Semínima" />
+				</div>
+				<div class="button" name="colcheia">
+					<img src="./img/colcheia.png" alt="Colcheia" />
+				</div>
+			</aside>	
+			<div id="game">
+				<div class="row"> <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div> </div>
+				<div class="row"> <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div> </div>
+<!--
+				<div class="row"> <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div> </div>
+-->
+			</div>
+		</main>
+	</body>
+</html>
