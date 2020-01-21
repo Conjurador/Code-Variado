@@ -176,5 +176,9 @@ state1.dist = {'home':{'park':8}, 'park':{'home':8}}
 tasks = [['travel','me','home','park']]
 var result = seek_plan(state1, tasks, [], 0);
 
+
+/* My Magic World */
+
+
 // https://pt.sharelatex.com/project/5a65e3748fc253413002260f
 // https://ocs.aaai.org/Papers/AIIDE/2008/AIIDE08-010.pdf
