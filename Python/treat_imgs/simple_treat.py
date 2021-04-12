@@ -31,6 +31,9 @@ def grayscale(mat, grade):
     
     return np.uint8( result )
 
+def saturation(mat, grade):
+    return 0
+
 files = os.listdir()
 # verify if directory 'generated' exists. If not then make it
 if(not(os.path.isdir('./generated'))):
