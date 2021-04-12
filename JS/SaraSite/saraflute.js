@@ -30,15 +30,20 @@ function randomInt( num ){
 }
 
 const textures = [
-	PIXI.Texture.from('note/claveDeSol.svg'),
-	PIXI.Texture.from('note/nota1.png'),
-	PIXI.Texture.from('note/nota2.png'),
-	PIXI.Texture.from('note/bass clef.png'),
-	PIXI.Texture.from('note/sharp.png')
+	// PIXI.Texture.from('note/claveDeSol.svg'),
+	// PIXI.Texture.from('note/nota1.png'),
+	// PIXI.Texture.from('note/nota2.png'),
+	// PIXI.Texture.from('note/bass clef.png'),
+	// PIXI.Texture.from('note/sharp.png'),
+	PIXI.Texture.from('note/claveDeSol_white.svg'),
+	PIXI.Texture.from('note/nota1_white.png'),
+	PIXI.Texture.from('note/nota2_white.png'),
+	PIXI.Texture.from('note/bass clef_white.png'),
+	PIXI.Texture.from('note/sharp_white.png')
 ]
 
 class MusicSymbol{
-	constructor(texture, app, tam, velocity){
+	constructor(texture, app, tam, velocity, acceleration){
 		this.container = new PIXI.Container();
 		app.stage.addChild(this.container);
 		this.app = app;
@@ -48,12 +53,14 @@ class MusicSymbol{
 		this.sprite.anchor.set(0.5);
 		this.sprite.x = -app.renderer.width;
 		//this.sprite.y = app.renderer.height / 2;
-		this.container.addChild(this.sprite);
-		this.velocity = velocity / (app.renderer.width / 2);
-		
 		this.sprite.height = this.sprite.height*tam/this.sprite.width;
 		this.sprite.width = tam;
+		this.container.addChild(this.sprite);
 		
+		// var _velocity = velocity / (app.renderer.height / 2);
+		this.acceleration = acceleration;
+		this._velocity = velocity / (app.renderer.height / 2);
+		this.velocity = velocity / (app.renderer.height / 2);
 		this.waiting = true;
 		this.chance = 0.02;
 		// this.container.x = app.renderer.width / 2;
@@ -74,8 +81,11 @@ class MusicSymbol{
 			this.sprite.alpha = 1;
 			this.sprite.x = randomInt(this.app.renderer.width)
 			this.waiting = true;
+			// this.velocity += this.acceleration;
+			this.velocity = this._velocity * (Math.random()*1.1+0.55);
 		}else{
 			this.sprite.y -= this.velocity * (this.sprite.height+this.app.renderer.height) / 2;
+			this.sprite.tint = 0xFFFFFF;
 		}
 	}
 }
@@ -92,7 +102,8 @@ document.body.appendChild(app.view);
 
 var notes = []
 for(var i=0; i<30; i++){
-	notes.push( new MusicSymbol(textures[ randomInt( textures.length ) ], app, 60, 5) );
+	notes.push( new MusicSymbol(textures[ randomInt( textures.length ) ], app, 60, 5, -4) );
+	// notes[i].sprite.tint = 0x00FF00;
 	app.stage.addChild(notes[i].sprite);
 }
 

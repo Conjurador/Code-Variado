@@ -91,10 +91,6 @@ h2{
 	font-family: SolveigText;
 }
 
-h2:hover {
-	font-size: 56px;
-}
-
 h3{
 	font-size: 32px;
 	font-family: SolveigText;
@@ -152,15 +148,25 @@ h4{
 	font-size: 20px;
 }
 
+.abstract_list{
+	font-size: 24px;
+	padding: 2px;
+	clear: both;
+	display: block;
+}
 .list{
-	font-size: 20px;
+	font-size: 16px;
 	padding: 2px;
 	clear: both;
 	display: block;
 }
 
 .list:hover{
-	background-color: rgba(0,0,0, 0.1);
+	background-color: rgba(152,81,0,0.9);
+}
+
+.thematic > div:hover{
+	background-color: rgba(0,41,90,0.8);
 }
 
 .thematic > header{
