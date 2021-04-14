@@ -62,11 +62,6 @@ table {
     src: url("fonts/italianno/Italianno-Regular.ttf") format("opentype");
 }
 
-@font-face {
-    font-family: Cinderela;
-    src: url("fonts/cinderela/CinderelaPersonalUseRegular-RDvM.ttf") format("opentype");
-}
-
 /* @font-face { */
     /* font-family: GraublauWeb; */
     /* font-weight: bold; */
@@ -142,7 +137,7 @@ h4{
 	/* min-width: 230px; */
 	width: 20vw;
 	padding: 2px;
-	text-align: center; 
+	text-align: center;
 }
 
 .abstract_main > div{
@@ -221,6 +216,10 @@ h4{
 #perfil{
 	border-radius: 50%;
 	/* width: 10px; */
+}
+
+#perfil:hover{
+	transform: scale(1.05);
 }
 
 @media only screen and (max-width: 860px) {

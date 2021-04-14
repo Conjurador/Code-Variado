@@ -38,8 +38,8 @@ const textures = [
 	PIXI.Texture.from('note/claveDeSol_white.svg'),
 	PIXI.Texture.from('note/nota1_white.png'),
 	PIXI.Texture.from('note/nota2_white.png'),
-	PIXI.Texture.from('note/bass clef_white.png'),
-	PIXI.Texture.from('note/sharp_white.png')
+	PIXI.Texture.from('note/bass clef_white.png')
+	// PIXI.Texture.from('note/sharp_white.png')
 ]
 
 class MusicSymbol{
